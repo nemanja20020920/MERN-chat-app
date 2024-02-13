@@ -26,8 +26,6 @@ const registerUser = asyncHandler(async (req, res) => {
     pic,
   });
 
-  console.log(newUser);
-
   if (newUser) {
     res.status(200).json({
       _id: newUser._id,
@@ -38,10 +36,39 @@ const registerUser = asyncHandler(async (req, res) => {
       token: createToken(newUser._id, '30d'),
     });
   } else {
-    console.log('JEDNO VELIKO SRANJE SE DESILO NEGDE');
     res.status(400);
     throw new Error('User not found');
   }
 });
 
-module.exports = { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400);
+    throw new Error('Please fill all the fields!');
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error('User does not exist!');
+  }
+
+  if (await user.matchPassword(password)) {
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      pic: user.pic,
+      isAdmin: user.isAdmin,
+      token: createToken(user._id, '30d'),
+    });
+  } else {
+    res.status(400);
+    throw new Error('Wrong password!');
+  }
+});
+
+module.exports = { registerUser, loginUser };
