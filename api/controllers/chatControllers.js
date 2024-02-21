@@ -21,7 +21,7 @@ const accessChat = asyncHandler(async (req, res) => {
 
   isChat = await User.populate(isChat, {
     path: 'latestMessage.sender',
-    select: 'name pic email',
+    select: 'fullName pic email',
   });
 
   if (isChat) {
@@ -55,7 +55,7 @@ const fetchChats = asyncHandler(async (req, res) => {
       .populate('users', '-password')
       .populate('groupAdmin', '-password')
       .populate('latestMessage')
-      .populate('latestMessage.sender', 'name pic email')
+      .populate('latestMessage.sender', 'fullName pic email')
       .sort({ updatedAt: -1 });
 
     res.status(200).send(chats);
@@ -151,7 +151,7 @@ const addUserToGroup = asyncHandler(async (req, res) => {
     )
       .populate('users groupAdmin', '-password')
       .populate('latestMessage')
-      .populate('latestMessage.sender', 'name pic email');
+      .populate('latestMessage.sender', 'fullName pic email');
 
     res.status(200).send(newGroup);
   } catch (error) {
@@ -193,7 +193,7 @@ const removeUserFromGroup = asyncHandler(async (req, res) => {
     )
       .populate('users groupAdmin', '-password')
       .populate('latestMessage')
-      .populate('latestMessage.sender', 'name pic email');
+      .populate('latestMessage.sender', 'fullName pic email');
 
     res.status(200).send(newGroup);
   } catch (error) {
