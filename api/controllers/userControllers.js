@@ -71,4 +71,31 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, loginUser };
+const fetchUsers = asyncHandler(async (req, res) => {
+  const { search } = req.query;
+
+  try {
+    const dbQuery = search
+      ? {
+          _id: { $ne: req.user._id },
+          $or: [
+            { fullName: { $regex: search, $options: 'i' } },
+            { email: { $regex: search, $options: 'i' } },
+          ],
+        }
+      : {
+          _id: { $ne: req.user._id },
+        };
+
+    const users = await User.find(dbQuery, { password: 0 }).sort({
+      fullName: 'asc',
+    });
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message);
+  }
+});
+
+module.exports = { registerUser, loginUser, fetchUsers };

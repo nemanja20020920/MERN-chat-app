@@ -49,14 +49,18 @@ const fetchChats = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
   try {
-    const chats = await Chat.find({
+    let chats = await Chat.find({
       users: { $elemMatch: { $eq: userId } },
     })
       .populate('users', '-password')
       .populate('groupAdmin', '-password')
       .populate('latestMessage')
-      .populate('latestMessage.sender', 'fullName pic email')
       .sort({ updatedAt: -1 });
+
+    chats = await User.populate(chats, {
+      path: 'latestMessage.sender',
+      select: 'fullName pic email',
+    });
 
     res.status(200).send(chats);
   } catch (error) {
