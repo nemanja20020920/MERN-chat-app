@@ -89,7 +89,9 @@ const SearchDrawer = () => {
             />
             <VStack>
               {users.length > 0 &&
-                users.map((user) => <SingleUser key={user._id} user={user} />)}
+                users.map((user) => (
+                  <SingleUser key={user._id} user={user} onClose={onClose} />
+                ))}
               {isLoading && (
                 <Stack width="100%" overflow-y="scroll">
                   {[...Array(18)].map((x, index) => (

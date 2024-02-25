@@ -1,21 +1,19 @@
-import { useDispatch } from 'react-redux';
 import Navbar from '../components/Navbar';
-import { userActions } from '../store/user';
-import { useEffect } from 'react';
+import { HStack } from '@chakra-ui/react';
+import ChatsList from '../components/ChatsList';
+import SelectedChat from '../components/SelectedChat';
 
 const Home = () => {
-  //Hooks
-  const dispatch = useDispatch();
+  return (
+    <>
+      <Navbar />
+      <HStack p="20px" height="91vh" width="100vw" bgColor="rgb(100, 100, 100)">
+        <ChatsList />
 
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-
-    if (userData && userData.token) {
-      dispatch(userActions.setUser({ ...userData }));
-    }
-  }, []);
-
-  return <Navbar>Home</Navbar>;
+        <SelectedChat />
+      </HStack>
+    </>
+  );
 };
 
 export default Home;

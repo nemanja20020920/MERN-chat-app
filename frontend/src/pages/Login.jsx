@@ -16,14 +16,17 @@ import image from '../assets/img/background.png';
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../store/user';
 
 const Login = () => {
   //State
   const [show, setShow] = useState(false);
 
-  //hooks
+  //Hooks
   const toast = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Submit
   const submitHandler = async (values) => {
@@ -45,6 +48,7 @@ const Login = () => {
       );
 
       localStorage.setItem('userData', JSON.stringify(data));
+      dispatch(userActions.setUser({ ...data }));
       navigate('/home');
       toast({
         title: 'Login success',
