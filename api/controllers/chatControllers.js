@@ -11,6 +11,7 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 
   let isChat = await Chat.findOne({
+    isGroupChat: false,
     $and: [
       { users: { $elemMatch: { $eq: req.user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
@@ -136,7 +137,7 @@ const addUserToGroup = asyncHandler(async (req, res) => {
   }
 
   try {
-    let newGroup = await Chat.find({
+    let newGroup = await Chat.findOne({
       _id: groupId,
       groupAdmin: req.user._id,
     });
@@ -178,7 +179,7 @@ const removeUserFromGroup = asyncHandler(async (req, res) => {
   }
 
   try {
-    let newGroup = await Chat.find({
+    let newGroup = await Chat.findOne({
       _id: groupId,
       groupAdmin: req.user._id,
     });
