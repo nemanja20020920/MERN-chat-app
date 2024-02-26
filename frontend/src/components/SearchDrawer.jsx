@@ -17,9 +17,10 @@ import {
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import SingleUser from './SingleUser';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { chatActions } from '../store/chat';
 
 const SearchDrawer = () => {
   //State
@@ -29,6 +30,7 @@ const SearchDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
   const toast = useToast();
+  const dispatch = useDispatch();
   //Store
   const userData = useSelector((state) => state.user);
 
@@ -56,10 +58,42 @@ const SearchDrawer = () => {
         status: 'error',
         duration: 5000,
         isClosable: true,
-        position: 'top',
+        position: 'top-left',
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const accessChatHandler = async (userId) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userData.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        `${API_URL}/chats`,
+        {
+          userId,
+        },
+        config
+      );
+
+      console.log(data);
+      dispatch(chatActions.setSelectedChat({ ...data }));
+      onClose();
+    } catch (error) {
+      toast({
+        title: 'An Error Occured!',
+        description: error.response.data.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-left',
+      });
     }
   };
 
@@ -90,7 +124,11 @@ const SearchDrawer = () => {
             <VStack>
               {users.length > 0 &&
                 users.map((user) => (
-                  <SingleUser key={user._id} user={user} onClose={onClose} />
+                  <SingleUser
+                    key={user._id}
+                    user={user}
+                    onClick={() => accessChatHandler(user._id)}
+                  />
                 ))}
               {isLoading && (
                 <Stack width="100%" overflow-y="scroll">

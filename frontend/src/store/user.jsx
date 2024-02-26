@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const userData = JSON.parse(localStorage.getItem('userData'));
+
 const initialState = {
-  _id: '',
-  fullName: '',
-  email: '',
-  pic: '',
-  token: '',
+  _id: userData?._id ?? '',
+  fullName: userData?.fullName ?? '',
+  email: userData?.email ?? '',
+  pic: userData?.pic ?? '',
+  token: userData?.token ?? '',
+  chatCreated: true,
 };
 
 const reducers = {
@@ -17,6 +20,9 @@ const reducers = {
     state.email = userData.email;
     state.pic = userData.pic;
     state.token = userData.token;
+  },
+  setChatCreated: (state) => {
+    state.chatCreated = !state.chatCreated;
   },
   logout: (state) => {
     state._id = '';

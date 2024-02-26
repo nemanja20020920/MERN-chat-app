@@ -29,9 +29,10 @@ const SingleChat = ({ chat }) => {
         {getChatName(chat, userId)}
       </Text>
       {chat?.latestMessage && (
-        <Text fontSize="15px">
+        <Text maxW="90%" wordBreak="break-all" fontSize="15px">
           <Text as="b">{chat?.latestMessage?.sender.fullName}: </Text>
-          {chat?.latestMessage?.content}
+          {chat?.latestMessage?.content.slice(0, 30)}
+          {chat?.latestMessage?.content.length > 30 && '...'}
         </Text>
       )}
     </Box>
