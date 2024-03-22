@@ -16,6 +16,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import image from '../assets/img/background.png';
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../store/user';
 
 const Register = () => {
   //State
@@ -24,6 +26,7 @@ const Register = () => {
   //Hooks
   const toast = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Validators
   const validateFirstName = (value) => {
@@ -83,6 +86,7 @@ const Register = () => {
       );
 
       localStorage.setItem('userData', JSON.stringify(data));
+      dispatch(userActions.setUser({ ...data }));
       navigate('/home');
       toast({
         title: 'Register success!',
