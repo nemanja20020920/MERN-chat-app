@@ -11,6 +11,7 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 
   let isChat = await Chat.findOne({
+    isGroupChat: false,
     $and: [
       { users: { $elemMatch: { $eq: req.user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
@@ -49,14 +50,18 @@ const fetchChats = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
   try {
-    const chats = await Chat.find({
+    let chats = await Chat.find({
       users: { $elemMatch: { $eq: userId } },
     })
       .populate('users', '-password')
       .populate('groupAdmin', '-password')
       .populate('latestMessage')
-      .populate('latestMessage.sender', 'fullName pic email')
       .sort({ updatedAt: -1 });
+
+    chats = await User.populate(chats, {
+      path: 'latestMessage.sender',
+      select: 'fullName pic email',
+    });
 
     res.status(200).send(chats);
   } catch (error) {
@@ -132,7 +137,7 @@ const addUserToGroup = asyncHandler(async (req, res) => {
   }
 
   try {
-    let newGroup = await Chat.find({
+    let newGroup = await Chat.findOne({
       _id: groupId,
       groupAdmin: req.user._id,
     });
@@ -174,7 +179,7 @@ const removeUserFromGroup = asyncHandler(async (req, res) => {
   }
 
   try {
-    let newGroup = await Chat.find({
+    let newGroup = await Chat.findOne({
       _id: groupId,
       groupAdmin: req.user._id,
     });

@@ -75,28 +75,25 @@ const fetchUsers = asyncHandler(async (req, res) => {
   const { search } = req.query;
 
   try {
-    if (!search) {
-      const users = await User.find({ _id: { $ne: req.user._id } }).sort({
-        fullName: 'asc',
-      });
 
-      res.status(200).send(users);
-    } else {
-      const users = await User.find(
-        {
+    const dbQuery = search
+      ? {
           _id: { $ne: req.user._id },
           $or: [
             { fullName: { $regex: search, $options: 'i' } },
             { email: { $regex: search, $options: 'i' } },
           ],
-        },
-        { password: 0 }
-      ).sort({
-        fullName: 'asc',
-      });
 
-      res.status(200).send(users);
-    }
+        }
+      : {
+          _id: { $ne: req.user._id },
+        };
+
+    const users = await User.find(dbQuery, { password: 0 }).sort({
+      fullName: 'asc',
+    });
+
+    res.status(200).send(users);
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
