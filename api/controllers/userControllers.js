@@ -75,6 +75,7 @@ const fetchUsers = asyncHandler(async (req, res) => {
   const { search } = req.query;
 
   try {
+
     const dbQuery = search
       ? {
           _id: { $ne: req.user._id },
@@ -82,6 +83,7 @@ const fetchUsers = asyncHandler(async (req, res) => {
             { fullName: { $regex: search, $options: 'i' } },
             { email: { $regex: search, $options: 'i' } },
           ],
+
         }
       : {
           _id: { $ne: req.user._id },
