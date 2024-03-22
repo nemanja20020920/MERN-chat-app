@@ -15,7 +15,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import image from '../assets/img/background.png';
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
-import { API_URL } from '../config';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../store/user';
 
@@ -40,7 +39,7 @@ const Login = () => {
 
     try {
       const { data } = await axios.post(
-        `${API_URL}/users/login`,
+        `${import.meta.env.VITE_API_URL}/users/login`,
         {
           ...values,
         },

@@ -9,8 +9,7 @@ const ChatsList = ({ chats }) => {
 
   return (
     <Box
-      flexBasis={{ base: '100%', md: '30%' }}
-      width="100%"
+      w={{ base: '100%', md: '30%' }}
       height="100%"
       bgColor="white"
       borderRadius={20}

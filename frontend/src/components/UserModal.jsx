@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userActions } from '../store/user';
+import { chatActions } from '../store/chat';
 
 const UserModal = () => {
   //Hooks
@@ -29,6 +30,7 @@ const UserModal = () => {
   const logoutHandler = () => {
     localStorage.clear('userData');
     dispatch(userActions.logout());
+    dispatch(chatActions.setSelectedChat({}));
     navigate('/');
     onClose();
   };

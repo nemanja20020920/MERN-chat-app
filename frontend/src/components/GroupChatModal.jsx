@@ -14,7 +14,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import SingleUser from './SingleUser';
-import { API_URL } from '../config';
 import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,7 +54,7 @@ const GroupChatModal = () => {
       };
 
       const { data } = await axios.post(
-        `${API_URL}/chats/createGroup`,
+        `${import.meta.env.VITE_API_URL}/chats/createGroup`,
         {
           name: groupName.trim(),
           users: groupMembers.map((member) => member._id),
@@ -88,7 +87,7 @@ const GroupChatModal = () => {
       };
 
       const { data } = await axios.get(
-        `${API_URL}/users?search=${query.trim()}`,
+        `${import.meta.env.VITE_API_URL}/users?search=${query.trim()}`,
         config
       );
 
@@ -120,7 +119,12 @@ const GroupChatModal = () => {
 
   return (
     <>
-      <Button colorScheme="gray" leftIcon={<AddIcon />} onClick={onOpen}>
+      <Button
+        colorScheme="gray"
+        leftIcon={<AddIcon />}
+        onClick={onOpen}
+        style={{ wordWrap: 'break-word' }}
+      >
         Create Group Chat
       </Button>
 

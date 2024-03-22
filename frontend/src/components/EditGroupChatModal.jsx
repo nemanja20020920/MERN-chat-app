@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import UserBadge from './UserBadge';
 import SingleUser from './SingleUser';
 import axios from 'axios';
-import { API_URL } from '../config';
 import { chatActions } from '../store/chat';
 
 const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
@@ -60,7 +59,7 @@ const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
       };
 
       const { data } = await axios.put(
-        `${API_URL}/chats/renameGroup`,
+        `${import.meta.env.VITE_API_URL}/chats/renameGroup`,
         {
           name: groupName.trim(),
           groupId: selectedChat._id,
@@ -93,7 +92,7 @@ const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
       };
 
       const { data } = await axios.get(
-        `${API_URL}/users?search=${query.trim()}`,
+        `${import.meta.env.VITE_API_URL}/users?search=${query.trim()}`,
         config
       );
 
@@ -132,7 +131,7 @@ const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
       };
 
       const { data } = await axios.put(
-        `${API_URL}/chats/addToGroup`,
+        `${import.meta.env.VITE_API_URL}/chats/addToGroup`,
         {
           groupId: selectedChat._id,
           userId: user._id,
@@ -140,7 +139,6 @@ const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
         config
       );
 
-      console.log(data);
       dispatch(chatActions.setSelectedChat({ ...data }));
       setGroupMembers((prevVal) => [...prevVal, user]);
       onFetchAgain();
@@ -166,7 +164,7 @@ const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
       };
 
       const { data } = await axios.put(
-        `${API_URL}/chats/removeFromGroup`,
+        `${import.meta.env.VITE_API_URL}/chats/removeFromGroup`,
         {
           groupId: selectedChat._id,
           userId,
@@ -174,7 +172,6 @@ const EditGroupChatModal = ({ selectedChat, onFetchAgain }) => {
         config
       );
 
-      console.log(data);
       dispatch(chatActions.setSelectedChat({ ...data }));
       setGroupMembers((prevVal) => [
         ...prevVal.filter((member) => member._id !== userId),

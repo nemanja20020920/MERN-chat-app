@@ -5,7 +5,6 @@ import SelectedChat from '../components/SelectedChat';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { API_URL } from '../config';
 
 const Home = () => {
   //State
@@ -32,7 +31,10 @@ const Home = () => {
         },
       };
 
-      const { data } = await axios.get(`${API_URL}/chats/fetchChats`, config);
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/chats/fetchChats`,
+        config
+      );
 
       setChats([...data]);
     } catch (error) {

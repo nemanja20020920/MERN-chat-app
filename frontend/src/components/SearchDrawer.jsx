@@ -19,7 +19,6 @@ import { useRef, useState } from 'react';
 import SingleUser from './SingleUser';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { API_URL } from '../config';
 import { chatActions } from '../store/chat';
 
 const SearchDrawer = () => {
@@ -46,7 +45,7 @@ const SearchDrawer = () => {
       };
 
       const { data } = await axios.get(
-        `${API_URL}/users?search=${query.trim()}`,
+        `${import.meta.env.VITE_API_URL}/users?search=${query.trim()}`,
         config
       );
 
@@ -75,14 +74,13 @@ const SearchDrawer = () => {
       };
 
       const { data } = await axios.post(
-        `${API_URL}/chats`,
+        `${import.meta.env.VITE_API_URL}/chats`,
         {
           userId,
         },
         config
       );
 
-      console.log(data);
       dispatch(chatActions.setSelectedChat({ ...data }));
       onClose();
     } catch (error) {

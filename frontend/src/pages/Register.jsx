@@ -16,7 +16,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import image from '../assets/img/background.png';
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
-import { API_URL } from '../config';
 
 const Register = () => {
   //State
@@ -76,7 +75,7 @@ const Register = () => {
 
     try {
       const { data } = await axios.post(
-        `${API_URL}/users/register`,
+        `${import.meta.env.VITE_API_URL}/users/register`,
         {
           ...values,
         },
